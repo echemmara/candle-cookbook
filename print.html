@@ -1,0 +1,1042 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Candle Cookbook</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Candle Cookbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="candle-cookbook"><a class="header" href="#candle-cookbook">Candle Cookbook</a></h1>
+<h2 id="-the-mission"><a class="header" href="#-the-mission">🚀 The Mission:</a></h2>
+<p>Democratize access to state of the art AI models.</p>
+<h2 id="-the-principles"><a class="header" href="#-the-principles">🌏 The Principles:</a></h2>
+<p>🫱🏾‍🫲🏼 <strong>Trust</strong> ~ ethically sourced data and end-to-end transparency.</p>
+<p>🔒 <strong>Privacy</strong> ~ secure, on-device inference without data sharing.</p>
+<p>🌱 <strong>Sustainability</strong> ~ optimize efficiency to minimize our carbon footprint.</p>
+<h2 id="-start-here"><a class="header" href="#-start-here">🕯️ Start Here</a></h2>
+<p>Welcome! Get familiar with Candle Cookbook by going through some of our favourite introductory tutorials</p>
+<ul>
+<li><a href="./local/hello-candle.html">Hello, Candle!</a></li>
+<li><a href="./aws/hello-aws.html">Hello, Candle on AWS!</a></li>
+<li><a href="./azure/hello-azure.html">Hello, Candle on Azure!</a></li>
+</ul>
+<p>We also recommend getting familiar with the Official Candle framework and User Guide</p>
+<ul>
+<li><a href="https://github.com/huggingface/candle">Huggingface Candle repo</a></li>
+<li><a href="https://huggingface.github.io/candle/index.html">Candle User Guide</a></li>
+</ul>
+<h2 id="-contributing"><a class="header" href="#-contributing">🌱 Contributing</a></h2>
+<p>We welcome contributions from anyone who aligns with Our Mission and Our Principles.</p>
+<p>To get started as a contributor:</p>
+<ul>
+<li>Read our <a href="../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+<li>Read the <a href="../CONTRIBUTING.html">Contributor Guidelines</a></li>
+<li>Install Candle Cookbook according to the <a href="../docs/DEV_ENV.html">Developer Setup</a> guide</li>
+</ul>
+<h2 id="-the-recipes"><a class="header" href="#-the-recipes">🍳 The Recipes:</a></h2>
+<ul>
+<li><a href="./local/index.html">Local Builds</a></li>
+<li><a href="./aws/index.html">AWS Builds</a></li>
+<li><a href="./azure/index.html">Azure Builds</a></li>
+</ul>
+<p><strong>Minimum requirements for GPU targetted binaries</strong></p>
+<p>For CUDA enabled builds using <code>--features cuda</code>:</p>
+<ul>
+<li>NVIDIA GPU with <a href="https://developer.nvidia.com/cuda-gpus">CUDA compute capabilitity</a> &gt; X.X</li>
+<li><a href="https://developer.nvidia.com/cuda-downloads">CUDA Toolkit</a> &gt;= X.X</li>
+</ul>
+<p>For cuDNN optimized builds using <code>--features cuda, cudnn</code>:</p>
+<ul>
+<li>NVIDIA GPU with <a href="https://developer.nvidia.com/cuda-gpus">CUDA compute capabilitity</a> &gt; X.X</li>
+<li><a href="https://developer.nvidia.com/cuda-downloads">CUDA Toolkit</a> &gt;= X.X</li>
+<li><a href="https://developer.nvidia.com/cudnn">cuDNN</a> &gt;= X.X</li>
+</ul>
+<p>Verify CUDA/cuDNN:</p>
+<pre><code># Verify CUDA
+nvidia-smi --query-gpu=compute_cap --format=csv
+nvcc --version
+
+# Verify cuDNN
+whereis cudnn.h
+</code></pre>
+<p><strong>⚠️ IMPORTANT:</strong></p>
+<p>AWS/Azure builds may incur charges. It is your responsibility to understand the associated resource costs. Please review the useage rates accordingly, as we are not liable for any charges incurred from the utilization of these platforms/services.</p>
+<h2 id="-roadmap"><a class="header" href="#-roadmap">🛣️ Roadmap</a></h2>
+<p>Our goal is to document each stage of a fully transparent LLM development cycle</p>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Publish MVP Candle Cookbook</li>
+<li><input disabled="" type="checkbox"/>
+Ethically source and construct an openly available LLM dataset</li>
+<li><input disabled="" type="checkbox"/>
+Build a Candle-based LLM from scratch</li>
+<li><input disabled="" type="checkbox"/>
+Customize LLM with finetuning</li>
+<li><input disabled="" type="checkbox"/>
+CI/CD deployment of LLM</li>
+</ul>
+<h2 id="-our-team"><a class="header" href="#-our-team">🧑‍🍳 Our Team:</a></h2>
+<p>Get to know our <a href="https://github.com/nogibjj/candle-cookbook/blob/main/TEAM.md">Community Leaders</a></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="local-builds"><a class="header" href="#local-builds">Local Builds</a></h1>
+<h2 id="requirements"><a class="header" href="#requirements">Requirements</a></h2>
+<p><strong>Minimum requirements for GPU targetted binaries</strong></p>
+<p>For CUDA enabled builds using <code>--features cuda</code>:</p>
+<ul>
+<li>NVIDIA GPU with <a href="https://developer.nvidia.com/cuda-gpus">CUDA compute capabilitity</a> &gt; X.X</li>
+<li><a href="https://developer.nvidia.com/cuda-downloads">CUDA Toolkit</a> &gt;= X.X</li>
+</ul>
+<p>For cuDNN optimized builds using <code>--features cuda, cudnn</code>:</p>
+<ul>
+<li>NVIDIA GPU with <a href="https://developer.nvidia.com/cuda-gpus">CUDA compute capabilitity</a> &gt; X.X</li>
+<li><a href="https://developer.nvidia.com/cuda-downloads">CUDA Toolkit</a> &gt;= X.X</li>
+<li><a href="https://developer.nvidia.com/cudnn">cuDNN</a> &gt;= X.X</li>
+</ul>
+<p>Verify CUDA/cuDNN:</p>
+<pre><code># Verify CUDA
+nvidia-smi --query-gpu=compute_cap --format=csv
+nvcc --version
+
+# Verify cuDNN
+whereis cudnn.h
+</code></pre>
+<h2 id="recipes"><a class="header" href="#recipes">Recipes</a></h2>
+<p><strong>Getting Started</strong></p>
+<ul>
+<li><a href="local/./hello-candle.html">Hello, Candle!</a> ~ start here</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-candle"><a class="header" href="#hello-candle">Hello, Candle!</a></h1>
+<h2 id="install-rust-via-rustup"><a class="header" href="#install-rust-via-rustup">Install Rust via <a href="https://rustup.rs/">rustup</a></a></h2>
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+
+# Set path
+source "$HOME/.cargo/env"
+</code></pre>
+<h2 id="configure-candle"><a class="header" href="#configure-candle">Configure <a href="https://github.com/huggingface/candle">Candle</a></a></h2>
+<pre><code>git clone https://github.com/huggingface/candle.git
+cd candle
+</code></pre>
+<h2 id="build--run-binaries"><a class="header" href="#build--run-binaries">Build &amp; Run Binaries</a></h2>
+<p>See all Candle example models <a href="https://github.com/huggingface/candle/tree/main/candle-examples/examples">here</a></p>
+<p><em>Example:</em></p>
+<pre><code># CPU build
+cargo build --example falcon --release
+
+# CUDA + cuDNN build
+cargo build --example falcon --features cuda,cudnn --release
+
+# Run binary
+cd target/release/examples
+./falcon --prompt "who invented the lightbulb"
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="aws-builds"><a class="header" href="#aws-builds">AWS Builds</a></h1>
+<h2 id="requirements-1"><a class="header" href="#requirements-1">Requirements</a></h2>
+<ul>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://portal.aws.amazon.com/billing/signup">AWS Account</a></li>
+</ul>
+<h2 id="recipes-1"><a class="header" href="#recipes-1">Recipes</a></h2>
+<p><strong>Getting Started</strong></p>
+<ul>
+<li><a href="aws/./hello-aws.html">Hello, Candle on AWS!</a> ~ Hello, Candle! on AWS EC2 + S3</li>
+<li><a href="aws/./aws-cli.html">AWS Candle CLI</a> ~ Developer workflows using the Candle CLI for AWS</li>
+</ul>
+<p><strong>CI/CD Pipelines</strong></p>
+<ul>
+<li><a href="aws/./jenkins-pipeline.html">CodePipeline + Jenkins Build</a> ~ automated binary builds on EC2 with Jenkins + CodePipeline</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-candle-on-aws"><a class="header" href="#hello-candle-on-aws">Hello, Candle on AWS!</a></h1>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://portal.aws.amazon.com/billing/signup">AWS Account</a></li>
+</ul>
+<h2 id="create-candle-ec2-iam-user"><a class="header" href="#create-candle-ec2-iam-user">Create Candle-EC2 IAM User</a></h2>
+<p>From AWS IAM Console &gt;&gt; Users &gt;&gt; Create User "Candle-EC2" &gt;&gt; Attach Policies Directly:</p>
+<ul>
+<li><code>AmazonS3FullAccess</code></li>
+</ul>
+<h2 id="launch-gpu-enabled-aws-ec2-compute-instance"><a class="header" href="#launch-gpu-enabled-aws-ec2-compute-instance">Launch GPU Enabled AWS EC2 Compute Instance</a></h2>
+<ol>
+<li>Open the AWS EC2 Console</li>
+<li>Configure a Ubuntu 20.04 Deep Learning Base GPU AMI image + G5.##xlarge instance type (see <a href="https://aws.amazon.com/ec2/instance-types/g5/">here</a> for charges and instance capcity)</li>
+<li>Create new key pair and save .pem file</li>
+<li>Allow SSH traffic</li>
+<li>Launch Instance</li>
+<li>From EC2 landing page &gt;&gt; Start Instance</li>
+</ol>
+<p><em>Gotchas</em></p>
+<ul>
+<li>You may need to request capacity increase from AWS to handle larger G5.##xlarge instances</li>
+<li>Move .pem file from downloads to ~/.ssh using <code>mv ~/Downloads/candle-key.pem ~/.ssh</code></li>
+</ul>
+<h2 id="connect-to-ec2-via-ssh"><a class="header" href="#connect-to-ec2-via-ssh">Connect to EC2 via SSH</a></h2>
+<ol>
+<li>Install <a href="https://code.visualstudio.com/docs/remote/ssh">Remote - SSH</a> from VSCode Extensions</li>
+<li>Add new SSH Connection</li>
+<li>From EC2 landing page &gt;&gt; Connect &gt;&gt; SSH client &gt;&gt; Copy commands to VSCode</li>
+</ol>
+<pre><code># NB: edit path to .pem file as needed
+chmod 400 ~/.ssh/candle-key.pem
+ssh -i "~/.ssh/candle-key.pem" ubuntu@ec2-##-##.us-east-1.compute.amazonaws.com
+</code></pre>
+<ol start="4">
+<li>Update .config file and validate format as follows</li>
+</ol>
+<pre><code>Host ec2-##-###.us-east-1.compute.amazonaws.com
+  HostName ec2-##-###.us-east-1.compute.amazonaws.com
+  IdentityFile ~/.ssh/candle-key.pem
+  User ubuntu
+</code></pre>
+<ol start="5">
+<li>Confirm remote host platform (Linux) and fingerprint (Continue)</li>
+<li>Launch terminal on remote host</li>
+</ol>
+<p><em>Gotchas</em></p>
+<ul>
+<li>If you stop and restart your EC2 instance, you will need to update the IP address in your .config file</li>
+</ul>
+<h2 id="verify-ec2-cudacudnn"><a class="header" href="#verify-ec2-cudacudnn">Verify EC2 CUDA/cuDNN</a></h2>
+<pre><code>nvidia-smi --query-gpu=compute_cap --format=csv
+nvcc --version
+
+whereis cudnn.h
+</code></pre>
+<h2 id="install-rust-via-rustup-1"><a class="header" href="#install-rust-via-rustup-1">Install Rust via <a href="https://rustup.rs/">rustup</a></a></h2>
+<pre><code>curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+
+# Set path
+source "$HOME/.cargo/env"
+</code></pre>
+<h2 id="install-aws-cli"><a class="header" href="#install-aws-cli">Install AWS CLI</a></h2>
+<pre><code>curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Check install
+aws --version
+</code></pre>
+<h2 id="configure-candle-ec2-iam-user"><a class="header" href="#configure-candle-ec2-iam-user">Configure Candle-EC2 IAM User</a></h2>
+<ol>
+<li>IAM Console &gt;&gt; Users &gt;&gt; Candle-EC2 &gt;&gt; Security Credentials &gt;&gt; Create Access Key "EC2-CLI"</li>
+<li>From EC2 SSH terminal</li>
+</ol>
+<pre><code>aws configure
+# Copy-Paste Candle-EC2 Access Key ID
+# Copy-Paste Candle-EC2 Secret Access Key
+# Default region name: us-east-1
+</code></pre>
+<h2 id="configure-candle-1"><a class="header" href="#configure-candle-1">Configure <a href="https://github.com/huggingface/candle">Candle</a></a></h2>
+<pre><code>git clone https://github.com/huggingface/candle.git
+cd candle
+</code></pre>
+<h2 id="build--run-binaries-1"><a class="header" href="#build--run-binaries-1">Build &amp; Run Binaries</a></h2>
+<p>See all Candle example models <a href="https://github.com/huggingface/candle/tree/main/candle-examples/examples">here</a></p>
+<p><em>Example:</em></p>
+<pre><code># CPU build
+cargo build --example falcon --release
+
+# CUDA + cuDNN build
+cargo build --example falcon --features cuda,cudnn --release
+
+# Run binary
+cd target/release/examples
+./falcon --prompt "who invented the lightbulb"
+</code></pre>
+<h2 id="store-binaries-in-s3"><a class="header" href="#store-binaries-in-s3">Store Binaries in S3</a></h2>
+<p>From AWS S3 Console &gt;&gt; Create S3 Bucket i.e <code>my-candle-binaries</code></p>
+<pre><code># Copy model binary from EC2 to S3 
+cd target/release/examples
+aws s3 cp quantized s3://my-candle-binaries
+</code></pre>
+<p><strong>⚠️ IMPORTANT: Terminate any AWS resources to prevent unexpected charges.</strong></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="automate-binary-builds-with-jenkins--codepipeline"><a class="header" href="#automate-binary-builds-with-jenkins--codepipeline">Automate Binary Builds with Jenkins + CodePipeline</a></h1>
+<h2 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h2>
+<ul>
+<li>Complete the <a href="aws/./hello-aws.html">Hello, Candle! on AWS</a> tutorial to setup your EC2 Instance, S3 Bucket and Candle-EC2 IAM User.</li>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://portal.aws.amazon.com/billing/signup">AWS Account</a></li>
+</ul>
+<h2 id="add-permissions-to-candle-ec2-iam-role"><a class="header" href="#add-permissions-to-candle-ec2-iam-role">Add Permissions to Candle-EC2 IAM Role</a></h2>
+<ol>
+<li>From AWS IAM Console &gt;&gt; Users &gt;&gt; Candle-EC2 &gt;&gt; Add permissions &gt;&gt; Attach existing policies directly</li>
+<li>Add <code>AWSCodePipelineCustomActionAccess</code> policy &gt;&gt; Save changes</li>
+</ol>
+<h2 id="integrate-jenkins-with-codepipeline"><a class="header" href="#integrate-jenkins-with-codepipeline">Integrate Jenkins with CodePipeline</a></h2>
+<p><strong>Add Security Group to EC2</strong></p>
+<ol>
+<li>From EC2 landing page &gt;&gt; Network &amp; Security &gt;&gt; Security Groups</li>
+<li>Create Security Group &gt;&gt; Name: "WebConnectEC2" &gt;&gt; Description: "Allow SSH and HTTP traffic to EC2"</li>
+<li>Add the following inbound rules. NB: Source = "Anywhere" is not recommended for production environments.</li>
+</ol>
+<p><img src="aws/../assets/aws/jenkins-pipeline/aws-ec2-security-group.png" alt="image" /></p>
+<ol start="4">
+<li>Click EC2 instance &gt;&gt; Actions &gt;&gt; Networking &gt;&gt; Change Security Groups &gt;&gt; Select "WebConnectEC2" &gt;&gt; Save</li>
+</ol>
+<p><strong>Install Jenkins on EC2</strong></p>
+<pre><code># Get Jenkins files
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc &gt; /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list &gt; /dev/null
+
+# Install Jenkins
+sudo apt-get update \
+  &amp;&amp;
+sudo apt-get install jenkins
+
+# Check install
+jenkins --version
+
+# Allow Jenkins service to start at boot
+sudo systemctl enable jenkins
+
+# Launch Jenkins
+sudo systemctl start jenkins
+</code></pre>
+<p><strong>Create Jenkins Admin/Login to Jenkins</strong></p>
+<ol>
+<li>Click EC2 instance &gt;&gt; Details &gt;&gt; Copy EC2 Public IPv4 DNS</li>
+<li>From browser navigate to http://&lt;EC2_public_ipv4_address&gt;:8080/</li>
+<li>From EC2 SSH terminal &gt;&gt; <code>sudo cat /var/lib/jenkins/secrets/initialAdminPassword</code> &gt;&gt; Copy password</li>
+<li>Paste password into Jenkins &gt;&gt; Continue &gt;&gt; Install suggested plugins</li>
+<li>Create admin user (suggested username: admin) &gt;&gt; Save and Continue</li>
+<li>Instance Configuration &gt;&gt; Not Now</li>
+</ol>
+<p><em>Gotchas</em></p>
+<p>To clean install Jenkins</p>
+<pre><code>sudo apt-get remove --purge jenkins
+rm -rf /var/lib/jenkins
+</code></pre>
+<p><strong>Create Jenkins Build Project</strong></p>
+<ol>
+<li>From Jenkins dashboard &gt;&gt; New Item &gt;&gt; Enter item name: "CandlePipeline" &gt;&gt; Select "Freestyle project" &gt;&gt; OK</li>
+<li>General &gt;&gt; Check "Execute concurrent builds if necessary"</li>
+<li>Source Code Management &gt;&gt; Check AWS CodePipeline</li>
+<li>From AWS IAM &gt;&gt; Users &gt;&gt; Candle-EC2 &gt;&gt; create second access key "Jenkins" &gt;&gt; Add to Jenkins Build AWS Config</li>
+<li>Category &gt;&gt; Build</li>
+<li>Provider: Jenkins</li>
+<li>Build Triggers &gt;&gt; Check "Poll SCM" &gt;&gt; Schedule: * * * * *</li>
+<li>Build Steps &gt;&gt; Add build step &gt;&gt; Execute shell &gt;&gt; Add command:</li>
+</ol>
+<pre><code>ls
+export PATH=/usr/local/cuda-11.8/bin:$PATH
+export PATH=/home/ubuntu/.cargo/bin:$PATH
+. "/home/ubuntu/.cargo/env"
+rustc --version
+cargo --version
+nvcc --version
+whereis cudnn.h
+nvidia-smi
+cargo build --example quantized --features cuda,cudnn --release
+cargo build --example falcon --features cuda,cudnn --release
+</code></pre>
+<ol start="9">
+<li>Post-build Actions &gt;&gt; Add post-build action &gt;&gt; AWS CodePipeline Publisher</li>
+<li>Output location &gt;&gt; Add &gt;&gt; Artifact Location: /target/release/examples &gt;&gt; Artifact Name: BuildArtifact</li>
+</ol>
+<p><strong>Create CodePipeline Project</strong></p>
+<ol>
+<li>AWS CodePipeline Console &gt;&gt; Create pipeline &gt;&gt; Pipeline name: "CandlePipeline" &gt;&gt; Check "New service role"</li>
+<li>Advanced Settings &gt;&gt; Custom location &gt;&gt; Bucket: "my-candle-binaries" &gt;&gt; Default AWS Managed Key &gt;&gt; Next</li>
+<li>Source provider &gt;&gt; Github (Version 2) &gt;&gt; Follow instructions to create Github Connection</li>
+<li>Uncheck "Start the pipeline on source code change"</li>
+<li>Repository name: huggingface/candle &gt;&gt; Branch Name: main &gt;&gt; Output artifact format:CodePipeline Default &gt;&gt; Next</li>
+<li>Build Provider &gt;&gt; Add Jenkins</li>
+<li>Provider Name: Jenkins <strong>NB: Must match Jenkins Build Project!</strong></li>
+<li>Server URL: http://&lt;EC2_public_ipv4_address&gt;:8080/</li>
+<li>Project Name: CandlePipeline <strong>NB: Must match Jenkins Build Project!</strong> &gt;&gt; Next</li>
+<li>Skip deploy stage &gt;&gt; Skip</li>
+<li>Review &gt;&gt; Create pipeline</li>
+<li>The first build will run automatically. Subsequent builds can be triggered using "Release change" button.</li>
+</ol>
+<h2 id="download-binaries"><a class="header" href="#download-binaries">Download Binaries</a></h2>
+<ol>
+<li>AWS S3 Console &gt;&gt; my-candle-binaries &gt;&gt; CandlePipeline/ &gt;&gt; BuildArtif/</li>
+<li>Order by "Last modified" &gt;&gt; Download latest zip</li>
+</ol>
+<p><strong>⚠️ IMPORTANT: Terminate any AWS resources to prevent unexpected charges.</strong></p>
+<h2 id="references"><a class="header" href="#references">References</a></h2>
+<ul>
+<li><a href="https://www.jenkins.io/doc/book/installing/linux/#debianubuntu">Install Jenkins to EC2</a></li>
+<li><a href="https://www.jenkins.io/doc/tutorials/tutorial-for-installing-jenkins-on-AWS/#installing-and-configuring-jenkins">Jenkins on EC2</a></li>
+<li><a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/tutorials-four-stage-pipeline.html#tutorials-four-stage-pipeline-prerequisites-jenkins-iam-role/">Jenkins + AWS Codepipeline</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="developer-workflows-using-the-candle-cli-for-aws"><a class="header" href="#developer-workflows-using-the-candle-cli-for-aws">Developer Workflows using the Candle CLI for AWS</a></h1>
+<p>The Candle CLI tool offers a simple interface to support Candle Cookbook development workflows seamlessly across AWS resources.</p>
+<h2 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h2>
+<ul>
+<li>Complete the <a href="aws/./hello-aws.html">Hello, Candle! on AWS</a> tutorial to setup your EC2 Instance, S3 Bucket and Candle-EC2 IAM User.</li>
+<li>Optional: Complete the <a href="aws/./jenkins-pipeline.html">Jenkins + CodePipeline</a> tutorial to setup automated EC2 and S3 builds</li>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://portal.aws.amazon.com/billing/signup">AWS Account</a></li>
+</ul>
+<h2 id="cli-setup"><a class="header" href="#cli-setup">CLI Setup</a></h2>
+<ol>
+<li>
+<p>Download <a href="https://github.com/athletedecoded/aws-candle/tree/main">Candle CLI for AWS</a> by clicking the "Download Latest" README badge or the <a href="https://github.com/athletedecoded/aws-candle/releases">latest release</a> source code.</p>
+</li>
+<li>
+<p>Per the <a href="https://github.com/athletedecoded/aws-candle/tree/main#setup">AWS Candle CLI Setup Instructions</a></p>
+<ul>
+<li>Create an AWS IAM User Policy "Candle-Cli" with <code>AmazonS3FullAccess</code> and <code>AmazonEC2FullAccess</code> permissions</li>
+<li>Create an access key for your "Candle-Cli" user</li>
+</ul>
+</li>
+<li>
+<p>Add a <code>.env</code> file and configure with AWS credentials and EC2 Key Pair</p>
+<pre><code># $touch .env
+AWS_ACCESS_KEY_ID=&lt;YOUR_ACCESS_KEY&gt;
+AWS_SECRET_ACCESS_KEY=&lt;YOUR_ACCESS_SECRET&gt;
+AWS_DEFAULT_REGION=&lt;YOUR_AWS_REGION&gt;
+EC2_KEY=PATH/TO/EC2_KEY_PAIR.pem
+</code></pre>
+</li>
+</ol>
+<h2 id="using-the-candle-cli-to-connect-to-your-ec2-instance"><a class="header" href="#using-the-candle-cli-to-connect-to-your-ec2-instance">Using the Candle CLI to connect to your EC2 Instance</a></h2>
+<pre><code># List your EC2 instances
+$ cargo run list --ec2
+
+# Connect to EC2
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action start
+$ cargo run connect --id &lt;INSTANCE_ID&gt;
+
+# Check AWS CLI is installed on your EC2
+ubuntu@ip$ aws --version
+
+# If not: install AWS CLI
+ubuntu@ip$ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+ubuntu@ip$ unzip awscliv2.zip
+ubuntu@ip$ sudo ./aws/install
+ubuntu@ip$ rm -r awscliv2.zip
+
+# Confirm install
+ubuntu@ip$ aws --version
+</code></pre>
+<h2 id="sample-workflows"><a class="header" href="#sample-workflows">Sample Workflows</a></h2>
+<ul>
+<li><a href="aws/aws-cli.html#run-prebuilt-binaries-on-ec2">Run Prebuilt Binaries on EC2</a></li>
+<li><a href="aws/aws-cli.html#build-binaries-on-ec2--s3-storage">Build Binaries on EC2 + S3 Storage</a></li>
+<li><a href="aws/aws-cli.html#move-jenkins--codepipeline-binaries-to-ec2">Move Jenkins + Codepipeline binaries to EC2</a></li>
+</ul>
+<h3 id="run-prebuilt-binaries-on-ec2"><a class="header" href="#run-prebuilt-binaries-on-ec2">Run Prebuilt Binaries on EC2</a></h3>
+<p>See available prebuilt binaries <a href="https://github.com/athletedecoded/cookbook-binaries/tree/main/binaries">here</a></p>
+<p>⚠️ IMPORTANT: Ensure you choose binaries compatible with your EC2 instance architecture</p>
+<pre><code># Connect to EC2
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action start
+$ cargo run connect --id &lt;INSTANCE_ID&gt;
+
+# Download binary
+ubuntu@ip$ wget -O mistral-cudnn https://github.com/athletedecoded/cookbook-binaries/raw/main/binaries/cudnn/mistral?download=
+
+# Set EC2 execution permissions
+ubuntu@ip$ chmod +x mistral-cudnn
+
+# Run binary
+ubuntu@ip$ ./mistral-cudnn --prompt "who invented the lightbulb"
+
+# Close SSH tunnel
+ubuntu@ip$ exit
+
+# Stop your EC2 instance to avoid charges
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action stop
+</code></pre>
+<h3 id="build-binaries-on-ec2--s3-storage"><a class="header" href="#build-binaries-on-ec2--s3-storage">Build Binaries on EC2 + S3 Storage</a></h3>
+<p>See available Candle models <a href="https://github.com/huggingface/candle/tree/main/candle-examples/examples">here</a></p>
+<pre><code># List your EC2 instances
+$ cargo run list --ec2
+
+# Connect to EC2
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action start
+$ cargo run connect --id &lt;INSTANCE_ID&gt;
+
+# If Candle repo is not on your EC2
+ubuntu@ip$ git clone https://github.com/huggingface/candle.git
+
+# Fetch latest candle repo
+ubuntu@ip$ cd candle
+ubuntu@ip$ git fetch upstream main
+
+# For CPU build (ex. quantized model)
+ubuntu@ip$ cargo build --example quantized --release
+
+# For CUDA + cuDNN build (ex. falcon model)
+ubuntu@ip$ cargo build --example falcon --features cuda,cudnn --release
+
+# Run models on EC2
+ubuntu@ip$ cd target/release/examples
+ubuntu@ip$ ./falcon --prompt "who invented the lightbulb"
+
+# Store models in existing S3 bucket "my-candle-binaries"
+ubuntu@ip$ aws s3 cp quantized s3://my-candle-binaries
+
+# Exit the SSH
+ubuntu@ip$ exit
+
+# Download binaries to run locally (assumes compatible local architecture)
+$ cargo run bucket --name my-candle-binaries --action list
+$ cargo run object --bucket my-candle-binaries --key falcon --action get
+$ ./falcon --prompt "who invented the lightbulb"
+
+# Stop your instance
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action stop
+</code></pre>
+<h3 id="move-jenkins--codepipeline-binaries-to-ec2"><a class="header" href="#move-jenkins--codepipeline-binaries-to-ec2">Move Jenkins + Codepipeline binaries to EC2</a></h3>
+<p>Complete the <a href="aws/./jenkins-pipeline.html">Jenkins + CodePipeline</a> tutorial to setup automated EC2 and S3 builds</p>
+<pre><code># List your S3 buckets, EC2 instances
+$ cargo run list --s3 --ec2
+
+# List S3 build artifacts
+$ cargo run bucket --name candle-cpu --action list
+# Will look something like candle-cpu/BuildArtif/7pKxpR0
+
+# Connect to EC2
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action start
+$ cargo run connect --id &lt;INSTANCE_ID&gt;
+
+# Copy S3 artifact bucket to EC2
+# Note: it is recommended to only have the latest build artifact in the bucket
+ubuntu@ip$ aws s3 sync s3://candle-cpu .
+
+# Unzip 
+ubuntu@ip$ mkdir my-binaries
+ubuntu@ip$ unzip candle-cpu/BuildArtif/7pKxpR0 ./my-binaries
+
+# Remove S3 tarball
+ubuntu@ip$ rm -r candle-cpu
+
+# Run models
+ubuntu@ip$ cd my-binaries
+ubuntu@ip$ ./falcon --prompt "who invented the lightbulb"
+
+# Exit the SSH
+ubuntu@ip$ exit
+
+# Stop your instance
+$ cargo run instance --id &lt;INSTANCE_ID&gt; --action stop
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="azure-builds"><a class="header" href="#azure-builds">Azure Builds</a></h1>
+<h2 id="requirements-2"><a class="header" href="#requirements-2">Requirements</a></h2>
+<ul>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://azure.microsoft.com/en-us/free">Azure Account</a></li>
+</ul>
+<h2 id="recipes-2"><a class="header" href="#recipes-2">Recipes</a></h2>
+<p><strong>Getting Started</strong></p>
+<ul>
+<li><a href="azure/./hello-azure.html">Hello, Azure!</a> ~ Hello, Candle on Azure</li>
+<li><a href="azure/./azure-spot-runner.html">Azure spot runner setup</a> ~ Setup the Spot Runner resource group on Azure prepare for the VM image build.</li>
+<li><a href="azure/./candle-VM.html">Azure VM + Github Action</a> Run the spot runner to build the binary and deploy the binary to Github release.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hello-candle-on-azure"><a class="header" href="#hello-candle-on-azure">Hello, Candle on Azure.</a></h1>
+<h2 id="prerequisites-3"><a class="header" href="#prerequisites-3">Prerequisites</a></h2>
+<ul>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://azure.microsoft.com/en-us/free">Azure Account</a></li>
+</ul>
+<h3 id="install-azure-cli"><a class="header" href="#install-azure-cli">Install Azure ClI</a></h3>
+<pre><code>$ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+</code></pre>
+<h3 id="login-in-to-azure"><a class="header" href="#login-in-to-azure">Login in to Azure</a></h3>
+<pre><code>$ az login 
+
+# if above not working run:  
+$ az login --use-device-code
+</code></pre>
+<pre><code># check your Azure account information
+$ az account show
+
+# if you have multiple accounts, you need to set the specific account you want to use: 
+$ az account set --subscription &lt;subscription_ID&gt;
+</code></pre>
+<ul>
+<li>the <code>subscription ID</code> is the <code>id</code> from result of az account show.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="azure-spot-runner-with-github-action"><a class="header" href="#azure-spot-runner-with-github-action">Azure spot runner with Github Action.</a></h1>
+<p>Using Ephemeral Infrastructure with Azure VMS as GitHub Action Runners to build Candle binary latter.</p>
+<h2 id="requirements-3"><a class="header" href="#requirements-3">Requirements</a></h2>
+<ul>
+<li>
+<p>Setup <a href="azure/./hello-azure.html">Azure Account</a> and record the <code>subscription ID</code> you have from the setting.</p>
+</li>
+<li>
+<p>Create a <a href="https://github.com/settings/tokens/new?description=Azure+GitHub+Runner&amp;scopes=repo">Personal Access Token (PAT)</a> record as <code>$GitHubPAT</code></p>
+</li>
+</ul>
+<h3 id="create-an-service-principle-with-the-following-details"><a class="header" href="#create-an-service-principle-with-the-following-details">Create an service principle with the following details:</a></h3>
+<ul>
+<li>AppID</li>
+<li>password</li>
+<li>tenant information</li>
+</ul>
+<h4 id="create-an-service-principal-by-running"><a class="header" href="#create-an-service-principal-by-running">Create an service principal by running:</a></h4>
+<pre><code>$ az ad sp create-for-rbac -n "Name_of_Service_principal"
+</code></pre>
+<ul>
+<li>This output contains all the infomation about your <code>AZURE_CREDENTIALS</code>. Please copy &amp; save it to your local in order to set up VM after we setup the Spot Runner.</li>
+</ul>
+<p>The output includes credentials that you must protect. Be sure that you do not include these credentials in your code or check the credentials into your source control. For more information, see https://aka.ms/azadsp-cli</p>
+<h3 id="create-an-azure-resource-group"><a class="header" href="#create-an-azure-resource-group">Create an Azure Resource Group</a></h3>
+<p>A resource group is a way to group services together so that you can keep track of them and delete them later with ease. Use the <code>az</code> CLI to accomplish this:</p>
+<pre><code>az group create --location eastus --name "&lt;RESOURCE_GROUP_NAME&gt;"
+</code></pre>
+<p>Keep that resource group name handy for other operations. In this repository the <code>$&lt;RESOURCE_GROUP_NAME&gt;</code> resource group is used throughout. Note the location as well. Make sure that the location (region) maps to the resources you want to create.</p>
+<h3 id="create-an-azure-key-vault"><a class="header" href="#create-an-azure-key-vault">Create an Azure Key Vault</a></h3>
+<p>You will store your GitHub PAT here so that it can later be retrieved by the VM.</p>
+<pre><code>$ az keyvault create --name candel-vms --resource-group githubVM --location eastus
+$ az keyvault secret set --vault-name candel-vms --name "GitHubPAT" --value $GITHUB_PAT
+</code></pre>
+<p>Replace $GITHUB_PAT with the value of the PAT created earlier</p>
+<h3 id="assign-an-identity-with-permissions-for-key-vault"><a class="header" href="#assign-an-identity-with-permissions-for-key-vault">Assign an identity with permissions for Key Vault</a></h3>
+<p>Now that the key vault is created, you need to create an identity and then allow resources in the resource group to be able to access it. You must give this identity a name, in this case we use GitHubVMs. Note this name will be used in other steps.</p>
+<pre><code>$ az identity create --name GitHubVMs --resource-group githubVM --location eastus
+
+</code></pre>
+<p>Capture the Principal ID which will be used for the value for --object-id later. You can retrieve it again by using:</p>
+<pre><code>$ az identity show --name GitHubVMs --resource-group githubVM
+</code></pre>
+<p>Use the object id to set the policy, replace $OBJECT_ID with the one you found in the previous command:</p>
+<pre><code>$ az keyvault set-policy --name candel-vms --object-id &lt;$BOJECT_ID&gt; --secret-permissions get
+</code></pre>
+<h3 id="verify-you-can-get-the-pat-with-the-following-command"><a class="header" href="#verify-you-can-get-the-pat-with-the-following-command">Verify you can get the PAT with the following command:</a></h3>
+<pre><code>az keyvault secret show --name "GitHubPAT" --vault-name candel-vms --query value -o tsv
+</code></pre>
+<h3 id="provide-a-role-to-vms"><a class="header" href="#provide-a-role-to-vms">Provide a role to VMs</a></h3>
+<p>Assign a role to the VMs so that they have enough permissions to write the image when getting created. Start by finding the principalId which will then be needed for the next step:</p>
+<pre><code>az identity show --name GitHubVMs --resource-group githubVM --query principalId
+</code></pre>
+<p>With the principalId you can assign it to the VMs now:</p>
+<pre><code>az role assignment create --assignee &lt;principal_ID&gt; --role Contributor --resource-group githubVM
+</code></pre>
+<h3 id="trigger-the-create-image-run"><a class="header" href="#trigger-the-create-image-run">Trigger the create image run</a></h3>
+<p>Now you are ready to create the image. Run it manually and make sure it works correctly. If succesful, an image will be created for you which you can query with the following command:</p>
+<pre><code>az image list --resource-group githubVM --output table
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="using-github-action-to-build-candle-image-on-azure-spot-runner-vm"><a class="header" href="#using-github-action-to-build-candle-image-on-azure-spot-runner-vm">Using Github Action to build Candle image on Azure Spot Runner VM</a></h1>
+<h2 id="prerequisites-4"><a class="header" href="#prerequisites-4">Prerequisites</a></h2>
+<ul>
+<li>A <a href="https://github.com/join">Github Account</a></li>
+<li>An <a href="https://azure.microsoft.com/en-us/free">Azure Account</a></li>
+<li>Finish setup <a href="azure/./azure-spot-runner.html">Azure Spot Runner</a></li>
+</ul>
+<h2 id="create-github-secrets"><a class="header" href="#create-github-secrets">Create Github Secrets</a></h2>
+<ol>
+<li>In Github, go to your repository.</li>
+<li>Go to <strong>Settings</strong> in the navigation menu.</li>
+<li>Select <strong>Securigy &gt; Secrets and variables &gt; Actions</strong>.</li>
+<li>Select <strong>New Repository Secret</strong></li>
+<li>Paste the entire <a href="https://github.com/ScottLL/candle-cookbook/blob/e96d35af185ec67f382e1ac891590197705d7ffd/src/azure/hello-azure.md#L49-L50">Json output</a> from the Azure CLI command into the github action secret's value field. Give the secret the name: <code>AZURE_CREDENTIALS</code>.</li>
+<li>Select <strong>Add secret.</strong></li>
+</ol>
+<h2 id="build-your-image"><a class="header" href="#build-your-image">Build your image</a></h2>
+<h3 id="structure-overview"><a class="header" href="#structure-overview">Structure Overview</a></h3>
+<pre><code>- Azure-spot-runner 
+  - .github/workflow
+    - create-image.yml
+    - runner.yml
+  - workflow-artifacts
+    - cloud-init.txt
+    - setup-image.sh
+</code></pre>
+<ol>
+<li>
+<p>Use the Create-Image.yml file below to create a custom virtual machine image.</p>
+<pre><code>on: workflow_dispatch
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    name: Create Custom Linux Image
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+
+    - name: Build and Distribute Custom VM Image
+      uses: azure/build-vm-image@v0
+      with:
+        resource-group-name: '&lt;RESOURCE_GROUP_NAME&gt;'
+        location: '&lt;RESOURCE_LOCATION&gt;'
+        managed-identity: '&lt;AZURE-IDENTITY&gt;' 
+        source-os-type: 'linux'
+        vm-size: "Standard_D2s_v3"
+        source-image-type: 'platformimage'
+        source-image: Canonical:0001-com-ubuntu-server-jammy:22_04-lts-gen2:latest
+        customizer-source: ${{ github.workspace }}/workflow-artifacts
+        customizer-script: |
+          ls -l /tmp/
+          ls -l /tmp/workflow-artifacts
+          sh /tmp/workflow-artifacts/setup-image.sh
+
+
+</code></pre>
+</li>
+</ol>
+<ul>
+<li>
+<p>You can modify the following information to your own secrets you build in <a href="azure/./azure-spot-runner.html">azure-spot-runner</a></p>
+<pre><code>resource-group-name: '&lt;RESOURCE_GROUP_NAME&gt;'
+location: '&lt;RESOURCE_LOCATION&gt;'
+managed-identity: '&lt;AZURE-IDENTITY&gt;'       
+</code></pre>
+<p>Replace the placeholders, where you created them in the Hello-azure.md,</p>
+<ul>
+<li><a href="azure/./azure-spot-runner.html#L27">RESOURCE_GROUP_NAME</a></li>
+<li><a href="azure/./hello-azure.html#L58">RESOURCE_LOCATION</a></li>
+<li><a href="azure/./hello-azure.html#L73">AZURE-IDENTITY</a></li>
+</ul>
+<p>You can also change the VM type (CPU &amp; GPU) by changing <code>&lt;vm-size&gt;</code>, <code>&lt;source-image-type&gt;</code>, <code>&lt;source-image&gt;</code></p>
+</li>
+</ul>
+<ol start="2">
+<li>
+<p>You will also create an <code>setup-image.sh</code> below for the image build.</p>
+<pre><code>#!/bin/bash
+#
+# Setup the runner to have the Azure CLI pre-installed as well as the Actions
+# Runner
+
+# Define a working directory
+WORK_DIR="/opt/actions-runner"
+
+# Install Azure CLI, should not use sudo
+curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
+# Create a folder
+mkdir -p $WORK_DIR &amp;&amp; cd $WORK_DIR
+
+# Download the latest runner package
+curl -O -L https://github.com/actions/runner/releases/download/v2.310.2/actions-runner-linux-x64-2.310.2.tar.gz
+
+# Extract the installer
+tar xzf $WORK_DIR/actions-runner-linux-x64-2.310.2.tar.gz
+
+</code></pre>
+</li>
+</ol>
+<h2 id="start-your-runner-and-build-the-binary"><a class="header" href="#start-your-runner-and-build-the-binary">Start your Runner and Build the Binary</a></h2>
+<ol>
+<li>
+<p>After you create the VM image, now we can start run it by using the Runner.yml below:</p>
+<pre><code>on: workflow_dispatch
+
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    name: Launch Runner
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Get GitHub Runner Registration Token
+      run: |
+        set -e
+        RUNNER_TOKEN=$(curl -f -X POST \
+                        -H "Authorization: token ${{ secrets.PAT }}" \
+                        -H "Accept: application/vnd.github.v3+json" \
+                        https://api.github.com/repos/&lt;YOUR_REPO_LOCATION&gt;/actions/runners/registration-token | grep token | cut -d '"' -f 4)
+        echo $RUNNER_TOKEN
+        if [ -z "$RUNNER_TOKEN" ]; then
+          echo "Failed to retrieve the runner token."
+          exit 1
+        fi
+        echo "RUNNER_TOKEN=$RUNNER_TOKEN" &gt;&gt; $GITHUB_ENV
+      env:
+        PAT: ${{ secrets.PAT }}
+
+    - name: Modify cloud-init.txt
+      run: |
+        set -e
+        sed -i "2iRUNNER_TOKEN=$RUNNER_TOKEN" workflow-artifacts/cloud-init.txt
+        if ! grep -q "RUNNER_TOKEN=$RUNNER_TOKEN" workflow-artifacts/cloud-init.txt; then
+          echo "Modification with sed failed."
+          exit 1
+        fi
+
+    - name: Login via Az module
+      uses: azure/login@v1
+      with:
+        creds: ${{secrets.AZURE_CREDENTIALS}}
+
+    - name: Find the latest image URI
+      id: find_image
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          IMAGE_URI=$(az image list --resource-group githubVM --query "[-1].id" --output tsv)
+          echo "::set-output name=image_uri::$IMAGE_URI"
+
+
+    - name: CREATE VM
+      id: create_vm
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+          az vm create --resource-group githubVM  --name "app-vm-${{ GITHUB.RUN_NUMBER }}"  --admin-username "runner" --admin-password "${{ secrets.VM_PASSWORD }}" --location  eastus \
+          --custom-data workflow-artifacts/cloud-init.txt \
+          --image "${{ steps.find_image.outputs.image_uri }}" \
+          --generate-ssh-keys
+
+    # At the end of your CREATE VM step
+    - name: Set VM Name Output
+      run: echo "::set-output name=vm_name::app-vm-${{ GITHUB.RUN_NUMBER }}"
+      id: vm_name
+</code></pre>
+</li>
+<li>
+<p>You can add your customer code inside the <code>workflow-artifacts/cloud-init.txt</code> below for specific need.</p>
+<pre><code>#!/bin/bash
+
+# Define a working directory
+export HOME=/root
+WORK_DIR="/opt/actions-runner"
+
+# Start the runner
+chown -R runner $WORK_DIR
+su - runner -c "$WORK_DIR/config.sh --unattended --url https://github.com/nogibjj/candle_scott_Azure_vm --token $RUNNER_TOKEN"
+nohup su - runner -c "$WORK_DIR/run.sh" &amp;
+
+# Install packages
+apt-get update
+apt-get install -y build-essential pkg-config libssl-dev protobuf-compiler jq git-lfs curl jq
+git lfs install
+
+# Install Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Get the candle Repo
+git clone https://github.com/huggingface/candle.git /root/candle
+cd /root/candle
+
+
+# Build the model and depoly the binary into Github Release. 
+if cargo build --example whisper --release; then
+    FILE="/root/candle/target/release/examples/whisper"
+    MIME_TYPE=$(file -b --mime-type "$FILE")
+    TAG="v$(date +%Y%m%d%H%M%S)"
+    RELEASE_NAME="CPU Whisper Binary Release"
+    GITHUB_TOKEN="$GITHUB_TOKEN"  # Token passed from GitHub Actions
+
+    CREATE_RELEASE_RESPONSE=$(curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: application/json" -d "{\"tag_name\": \"$TAG\", \"name\": \"$RELEASE_NAME\"}" "https://api.github.com/repos/nogibjj/candle_scott_Azure_vm/releases")
+    UPLOAD_URL=$(echo $CREATE_RELEASE_RESPONSE | jq -r .upload_url | sed "s/{?name,label}//")
+
+    curl -X POST -H "Authorization: token $GITHUB_TOKEN" -H "Content-Type: $MIME_TYPE" --data-binary @"$FILE" "$UPLOAD_URL?name=$(basename "$FILE")"
+else
+    echo "Cargo build failed."
+fi
+
+</code></pre>
+<p>The example code in cloud-init.txt is set up to build the candle whisper binary and deploy the binary into the Github release.</p>
+</li>
+</ol>
+<blockquote>
+<p>Note, after the runner build, it might takes up to 15 mins for this cpu VM to finish the work and deploy the whisper release in Github.</p>
+</blockquote>
+<p>After the binary deploy to Github, you will find out the release file in your github repo.</p>
+<p><img src="azure/../assets/azure/spotrunner/releases.png" alt="image" /></p>
+<h3 id="debugging-on-vm"><a class="header" href="#debugging-on-vm">Debugging on VM</a></h3>
+<p>You can check the log from Azure Portal:</p>
+<ol>
+<li>Go to the Azure Portal.</li>
+<li>Navigate to the "Virtual Machines" section.</li>
+<li>Find and select the VM you created (app-vm).</li>
+<li>Under the "Support + troubleshooting" section, find and click on "Serial console".</li>
+<li>The serial console will open in a new window. You might have to wait for a few moments as the console establishes a connection to the VM.</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
